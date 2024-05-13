@@ -1,11 +1,11 @@
 {
   "name": "@myszon01/aws-cdk-patterns",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
-  "main": "index.ts",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
