@@ -53,16 +53,49 @@ export class SetupStack extends Stack {
                 actions: ["iam:PassRole"],
                 resources: [`arn:aws:iam::${account}:role/${shortId}*`],
             }),
+
         ];
 
         if (ecrParameters) {
             createEcrRepositories(this, ecrParameters)
             environments?.forEach(environment => {
                 const ssmImageTagName = createSsmImageTag(this, appId, environment)
-                new CfnOutput(this, `${environment.environmentName}-ssm-image-tag-name`, { value: ssmImageTagName });
+                new CfnOutput(this, `${environment.environmentName}-SsmImageTagName`, { value: ssmImageTagName });
             })
             const ecrPushRoleArn = createGithubEcrPushRole(this, github, ecrParameters.registryName);
-            new CfnOutput(this, 'github-ecr-push-role-arn', { value: ecrPushRoleArn });
+            new CfnOutput(this, 'GithubEcrPushRoleArn', { value: ecrPushRoleArn });
+
+            this.policyStatements.push(
+                new PolicyStatement({
+                    sid: "EcrPermissions",
+                    actions: [
+                        "ecr:CreateRepository",
+                        "ecr:TagResource",
+                        "ecr:SetRepositoryPolicy",
+                        "ecr:DeleteRepository"
+                    ],
+                    resources: [
+                        ...ecrParameters.repositories.map(repository => {
+                            return `arn:aws:ecr:${region}:${account}:repository/${ecrParameters?.registryName}/${repository}`;
+                        }),
+
+                    ]
+                }),
+                new PolicyStatement({
+                    sid: "SsmPermissions",
+                    actions: [
+                        "ssm:PutParameter",
+                        "ssm:DeleteParameter",
+                        "ssm:AddTagsToResource"
+                    ],
+                    resources: [
+                        ...environments.map(environment => {
+                            return `arn:aws:ssm:${region}:${account}:parameter/${appId}/${environment.environmentName}/tags`;
+                        }),
+
+                    ]
+                })
+            )
         }
 
         // create other roles needed for deployment and pipeline setup
@@ -70,8 +103,10 @@ export class SetupStack extends Stack {
             const roleArn = createGithubCdkDeployRole(this, github, appId, environment)
             const baseToolkitPolicyArn = createBaseToolkitPolicy(this, appId, environment)
 
-            new CfnOutput(this, `${environment.environmentName}-github-deploy-role-arn`, { value: roleArn });
-            new CfnOutput(this, `${environment.environmentName}-base-policy--arn`, { value: baseToolkitPolicyArn });
+
+
+            new CfnOutput(this, `${environment.environmentName}-GithubDeployRoleArn`, { value: roleArn });
+            new CfnOutput(this, `${environment.environmentName}-CdkBasePolicyArn`, { value: baseToolkitPolicyArn });
         })
     }
 }
