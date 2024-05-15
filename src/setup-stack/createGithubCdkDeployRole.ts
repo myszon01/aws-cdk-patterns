@@ -4,7 +4,7 @@ import {Environment, Github} from "./SetupStack";
 
 
 
-export function createCdkDeployRole (
+export function createGithubCdkDeployRole (
     stack: Stack,
     github: Github,
     appId: string,
@@ -130,7 +130,8 @@ export function createCdkDeployRole (
                 "ssm:GetParameter",
                 "ssm:GetParameters",
                 "ssm:PutParameter",
-                "ssm:DeleteParameter"
+                "ssm:DeleteParameter",
+                "ssm:AddTagsToResource"
             ],
             resources: [
                 `arn:aws:ssm:${region}:${account}:parameter/cdk-bootstrap/${bootstrapQualifier}/version`
@@ -153,6 +154,19 @@ export function createCdkDeployRole (
             ],
             resources: [
                 `arn:aws:ecr:${region}:${account}:repository/${appId}/*`
+            ]
+        }),
+        new PolicyStatement({
+            actions: [
+                "ecr:CreateRepository",
+                "ecr:DeleteRepository",
+                "ecr:DescribeRepositories",
+                "ecr:PutLifecyclePolicy",
+                "ecr:SetRepositoryPolicy",
+                "ecr:TagResource"
+            ],
+            resources: [
+                `arn:aws:ecr:${region}:${account}:repository/cdk-${bootstrapQualifier}-container-assets-*`
             ]
         })
     ]

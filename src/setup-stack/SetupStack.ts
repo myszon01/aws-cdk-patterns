@@ -1,11 +1,13 @@
 import {CfnOutput, Stack} from "aws-cdk-lib";
 import {Construct} from "constructs";
 import {StackProps} from "aws-cdk-lib/core/lib/stack";
-import {PolicyStatement} from "aws-cdk-lib/aws-iam";
+import {ManagedPolicy, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {createEcrRepositories} from "./createEcrRepositories";
-import {createEcrPushRole} from "./createEcrPushRole";
-import {createCdkDeployRole} from "./createCdkDeployRole";
+import {createGithubEcrPushRole} from "./createGithubEcrPushRole";
+import {createGithubCdkDeployRole} from "./createGithubCdkDeployRole";
 import {createSsmImageTag} from "./createSsmImageTag";
+import {CustomPolicy} from "aws-cdk-lib/aws-config";
+import {createBaseToolkitPolicy} from "./createBaseToolkitPolicy";
 
 interface SetupStackProps extends StackProps {
     github: Github
@@ -57,19 +59,19 @@ export class SetupStack extends Stack {
             createEcrRepositories(this, ecrParameters)
             environments?.forEach(environment => {
                 const ssmImageTagName = createSsmImageTag(this, appId, environment)
-                new CfnOutput(this, `${environment.environmentName}SsmImageTagName`, { value: ssmImageTagName });
+                new CfnOutput(this, `${environment.environmentName}-ssm-image-tag-name`, { value: ssmImageTagName });
             })
-            const ecrPushRoleArn = createEcrPushRole(this, github, ecrParameters.registryName);
-            new CfnOutput(this, 'EcrPushRoleArn', { value: ecrPushRoleArn });
+            const ecrPushRoleArn = createGithubEcrPushRole(this, github, ecrParameters.registryName);
+            new CfnOutput(this, 'github-ecr-push-role-arn', { value: ecrPushRoleArn });
         }
 
         // create other roles needed for deployment and pipeline setup
         environments?.forEach(environment => {
-            const roleArn = createCdkDeployRole(this, github, appId, environment)
-            new CfnOutput(this, `${environment.environmentName}DeployRoleArn`, { value: roleArn });
+            const roleArn = createGithubCdkDeployRole(this, github, appId, environment)
+            const baseToolkitPolicyArn = createBaseToolkitPolicy(this, appId, environment)
+
+            new CfnOutput(this, `${environment.environmentName}-github-deploy-role-arn`, { value: roleArn });
+            new CfnOutput(this, `${environment.environmentName}-base-policy--arn`, { value: baseToolkitPolicyArn });
         })
     }
-
-
-
 }

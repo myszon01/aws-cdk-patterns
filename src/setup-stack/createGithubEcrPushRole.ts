@@ -2,7 +2,7 @@ import {Stack} from "aws-cdk-lib";
 import {FederatedPrincipal, PolicyStatement, Role} from "aws-cdk-lib/aws-iam";
 import {Github} from "./SetupStack";
 
-export function  createEcrPushRole (
+export function  createGithubEcrPushRole (
     stack: Stack,
     github: Github,
     registry: string
