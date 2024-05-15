@@ -90,8 +90,8 @@ export function createGithubCdkDeployRole (
                 "s3:DeleteBucketPolicy"
             ],
             resources: [
-                `arn:aws:s3:::cdk-${bootstrapQualifier}-assets-${appId}-${environmentName}`,
-                `arn:aws:s3:::cdk-${bootstrapQualifier}-assets-${appId}-${environmentName}/*`
+                `arn:aws:s3:::cdk-${bootstrapQualifier}-assets-${account}-${region}`,
+                `arn:aws:s3:::cdk-${bootstrapQualifier}-assets-${account}-${region}/*`
 
             ]
         }),
