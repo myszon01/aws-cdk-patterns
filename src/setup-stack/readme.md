@@ -1,6 +1,6 @@
 
 
-***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, APP_ID, STACK_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
+***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, APP_ID, STACK_NAME, CDK_TOOLKIT_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
 
 ### Create a managed policy with below permissions for use with `--cloudformation-execution-policies`. 
 
@@ -122,7 +122,7 @@
                 "cloudformation:ValidateTemplate",
                 "cloudformation:DeleteStack"
             ],
-            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/cdk-toolkit-APP_ID-STACK_NAME/*",
+            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/CDK_TOOLKIT_NAME/*",
             "Effect": "Allow"
         },
         {
