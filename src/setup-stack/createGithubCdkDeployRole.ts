@@ -87,7 +87,8 @@ export function createGithubCdkDeployRole (
                 "s3:PutBucketPublicAccessBlock",
                 "s3:PutBucketPolicy",
                 "s3:GetBucketPolicy",
-                "s3:DeleteBucketPolicy"
+                "s3:DeleteBucketPolicy",
+                "s3:PutBucketTagging"
             ],
             resources: [
                 `arn:aws:s3:::cdk-${bootstrapQualifier}-assets-${account}-${region}`,
