@@ -10,7 +10,7 @@ export function createBaseToolkitPolicy(
     const { bootstrapQualifier, environmentName} = environment
     const { account, region } = stack
 
-    const mngPolicy = new ManagedPolicy(stack, "base-toolkit-policy", {
+    const mngPolicy = new ManagedPolicy(stack, `${environmentName}-base-toolkit-policy`, {
         statements: [
             new PolicyStatement({
                 actions: [
