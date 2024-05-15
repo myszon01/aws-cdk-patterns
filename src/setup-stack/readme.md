@@ -143,11 +143,12 @@
                 "s3:PutBucketPublicAccessBlock",
                 "s3:PutBucketPolicy",
                 "s3:GetBucketPolicy",
-                "s3:DeleteBucketPolicy"
+                "s3:DeleteBucketPolicy",
+                "s3:PutBucketTagging"
             ],
             "Resource": [
-                "arn:aws:s3:::cdk-BOOTSTRAP_QUALIFIER-assets-STACK_NAME",
-                "arn:aws:s3:::cdk-BOOTSTRAP_QUALIFIER-assets-STACK_NAME/*"
+              "arn:aws:s3:::cdk-BOOTSTRAP_QUALIFIER-assets-ACCOUNT_NR-REGION",
+              "arn:aws:s3:::cdk-BOOTSTRAP_QUALIFIER-assets-ACCOUNT_NR-REGION/*"
             ],
             "Effect": "Allow"
         },
