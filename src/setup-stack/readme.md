@@ -1,8 +1,10 @@
 
 
-***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, APP_ID, STACK_NAME, CDK_TOOLKIT_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
+***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, APP_ID, STACK_NAME, CDK_TOOLKIT_NAME, CDK_BASE_TOOLKIT_POLICY_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
 
 ### Create a managed policy with below permissions for use with `--cloudformation-execution-policies`. 
+
+Save the name of policy into `CDK_BASE_TOOLKIT_POLICY_NAME`
 
 ```json
 {
@@ -19,7 +21,7 @@
     },
     {
       "Action": "ssm:*",
-      "Resource": "arn:aws:ssm:PLACEHOLDER_REGION:ACCOUNT_NR:parameter/cdk-bootstrap/BOOTSTRAP_QUALIFIER/version",
+      "Resource": "arn:aws:ssm:REGION:ACCOUNT_NR:parameter/cdk-bootstrap/BOOTSTRAP_QUALIFIER/version",
       "Effect": "Allow",
       "Sid": "AllowSsmBootstrapVersionCheck"
     },
@@ -171,7 +173,7 @@
             ],
             "Resource": [
                 "arn:aws:iam::ACCOUNT_NR:role/cdk-BOOTSTRAP_QUALIFIER*",
-                "arn:aws:iam::ACCOUNT_NR:policy/APP_ID-STACK_NAME-base-toolkit-policy"
+                "arn:aws:iam::ACCOUNT_NR:policy/CDK_BASE_TOOLKIT_POLICY_NAME"
             ],
             "Effect": "Allow"
         },
