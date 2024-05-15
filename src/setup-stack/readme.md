@@ -1,6 +1,6 @@
 
 
-***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, STACK_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
+***Replace ACCOUNT_NR, REGION, BOOTSTRAP_QUALIFIER, APP_ID, STACK_NAME, GITHUB_ORG, GITHUB_REPO placeholders with your values.***
 
 ### Create a managed policy with below permissions for use with `--cloudformation-execution-policies`. 
 
@@ -12,7 +12,7 @@
       "Action": ["sts:AssumeRole", "sts:TagSession"],
       "Resource": [
         "arn:aws:iam::ACCOUNT_NR:role/cdk-BOOTSTRAP_QUALIFIER*",
-        "arn:aws:iam::ACCOUNT_NR:role/STACK_NAME*"
+        "arn:aws:iam::ACCOUNT_NR:role/APP_ID-STACK_NAME*"
       ],
       "Effect": "Allow",
       "Sid": "AllowAssumeCfExecRole"
@@ -32,7 +32,7 @@
         "iam:GetPolicy",
         "iam:DeletePolicy"
       ],
-      "Resource": "arn:aws:iam::ACCOUNT_NR:policy/STACK_NAME*",
+      "Resource": "arn:aws:iam::ACCOUNT_NR:policy/APP_ID-STACK_NAME*",
       "Effect": "Allow",
       "Sid": "PermissionsNeededForPolicyManagement"
     },
@@ -51,7 +51,7 @@
         "iam:ListRoleTags"
       ],
       "Resource": [
-        "arn:aws:iam::ACCOUNT_NR:role/STACK_NAME*",
+        "arn:aws:iam::ACCOUNT_NR:role/APP_ID-STACK_NAME*",
         "arn:aws:iam::ACCOUNT_NR:role/cdk-BOOTSTRAP_QUALIFIER*"
       ],
       "Effect": "Allow",
@@ -122,12 +122,12 @@
                 "cloudformation:ValidateTemplate",
                 "cloudformation:DeleteStack"
             ],
-            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/cdk-toolkit-STACK_NAME/*",
+            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/cdk-toolkit-APP_ID-STACK_NAME/*",
             "Effect": "Allow"
         },
         {
             "Action": "cloudformation:DescribeStacks",
-            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/STACK_NAME*",
+            "Resource": "arn:aws:cloudformation:REGION:ACCOUNT_NR:stack/APP_ID-STACK_NAME*",
             "Effect": "Allow"
         },
         {
@@ -171,7 +171,7 @@
             ],
             "Resource": [
                 "arn:aws:iam::ACCOUNT_NR:role/cdk-BOOTSTRAP_QUALIFIER*",
-                "arn:aws:iam::ACCOUNT_NR:policy/STACK_NAME-base-toolkit-policy"
+                "arn:aws:iam::ACCOUNT_NR:policy/APP_ID-STACK_NAME-base-toolkit-policy"
             ],
             "Effect": "Allow"
         },
